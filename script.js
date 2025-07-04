@@ -1,34 +1,45 @@
-//your JS code here. If required.
-//your JS code here. If required.
-let saveInput = document.querySelector('input[type="submit"]')
-saveInput.addEventListener("click",()=>{
-	let fontSize = document.querySelector('#fontsize').value
-	let fontColor = document.querySelector('input[type="color"]').value
-	// console.log(fontSize,fontColor)
-	document.cookie = "fontcolor="+fontColor+"; expires= Fri, 25 June 2023 12:00:00 UTC; path=/";
-	document.cookie = "fontsize="+fontSize+"; expires= Fri, 25 June 2023 12:00:00 UTC; path=/";
-}) 
-
-function showCookieValue(){
-let fontSizeCookie = getCookie("fontsize")
-	if(fontSizeCookie){
-		document.querySelector('#fontsize').value = fontSizeCookie 
-	}
-	let fontColorCookie =getCookie("fontcolor")
-	if(fontColorCookie){
-		document.querySelector('input[type="color"]').value = fontColorCookie 
-	}
-
-	
+function setCookie(name, value, days = 365) {
+  const expires = new Date(Date.now() + days * 86400000).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
 }
 
-function getCookie(key){
-	let cookies =  document.cookie.split("; ")
-	 .find((row) => row.startsWith(key))
-	if(cookies){
-		return cookies.split("=")[1]
-	}else{
-		return undefined
-	}
-	
+function getCookie(name) {
+  const cookies = document.cookie.split("; ");
+  for (const cookie of cookies) {
+    const [key, val] = cookie.split("=");
+    if (key === name) return decodeURIComponent(val);
+  }
+  return null;
 }
+
+function applyPreferences() {
+  const fontSize = getCookie("fontsize") || "16";
+  const fontColor = getCookie("fontcolor") || "#000000";
+
+  // Apply to inputs
+  document.querySelector("#fontsize").value = fontSize;
+  document.querySelector("#fontcolor").value = fontColor;
+
+  // Apply to CSS variables
+  document.documentElement.style.setProperty("--fontsize", fontSize + "px");
+  document.documentElement.style.setProperty("--fontcolor", fontColor);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  applyPreferences();
+
+  const saveBtn = document.querySelector('input[type="submit"]');
+  saveBtn.addEventListener("click", function (e) {
+    e.preventDefault(); // Prevent form submission
+
+    const fontSize = document.querySelector("#fontsize").value;
+    const fontColor = document.querySelector("#fontcolor").value;
+
+    // Save cookies
+    setCookie("fontsize", fontSize);
+    setCookie("fontcolor", fontColor);
+
+    // Apply immediately
+    applyPreferences();
+  });
+});

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-
 <html>
   <head>
     <link rel="stylesheet" href="styles.css" />
+    <title>Font Customizer</title>
   </head>
+  <body>
+    <h1>Customize Page Appearance</h1>
 
-  <body onload = "showCookieValue()">
-    <!-- the entire body must be written by student -->
-    <form>
+    <form id="settingsForm">
       <label for="fontsize">Font Size:</label>
       <input
         type="number"
@@ -17,12 +17,21 @@
         max="72"
         value="16"
       />
-      <br />
+      <br /><br />
+
       <label for="fontcolor">Font Color:</label>
-      <input type="color" id="fontcolor" name="fontcolor" value="#000000" />
-      <br />
+      <input
+        type="color"
+        id="fontcolor"
+        name="fontcolor"
+        value="#000000"
+      />
+      <br /><br />
+
       <input type="submit" value="Save" />
     </form>
+
+    <p>This is a preview text. When you change font size and color, this paragraph will reflect your settings.</p>
 
     <script type="text/javascript" src="./script.js"></script>
   </body>
